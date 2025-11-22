@@ -6,7 +6,7 @@ dotenv.config();
 // Contract addresses
 export const CONTRACTS = {
     baseSepolia: {
-        omniSweeper: 'TO_BE_DEPLOYED', // Deploy first
+        omniSweeper: '0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A', // ✅ DEPLOYED!
         testDustToken: 'TO_BE_DEPLOYED', // Optional test token
         usdc: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', // Official USDC on Base Sepolia
         chainId: 84532,

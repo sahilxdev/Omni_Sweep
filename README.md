@@ -7,8 +7,8 @@
 [![Contracts](https://img.shields.io/badge/Contracts-2%20Chains-blue)](https://sepolia.etherscan.io/address/0xfd1411e2e3ddfC0C68649d3FEb1bE50C6d599EBd)
 [![Tests](https://img.shields.io/badge/Tests-7/7%20Passing-brightgreen)](./backend/TEST_RESULTS.md)
 
+**🔗 [Live Backend API](https://omni-sweeper-production.up.railway.app) | 📄 [Test Results](./backend/TEST_RESULTS.md) | 📚 [Technical Docs](./HACKATHON_SUBMISSION.md)**
 **📚 [Protocol Specification](./PROTOCOL.md) | 🔗 [Live API](https://omni-sweeper-production.up.railway.app) | 📄 [Test Results](./backend/TEST_RESULTS.md) | 🏆 [Hackathon Submission](./HACKATHON_SUBMISSION.md)**
-
 ---
 
 ## 🎯 The Problem: The $0 ETH Trap
@@ -112,7 +112,7 @@ Connect Wallet → Scan Dust → Click "Sweep" → Sign Message → Done!
 | Component | Status | Impact | Proof |
 |-----------|--------|--------|-------|
 | **Gas Abstraction Protocol** | ✅ Implemented | Novel contribution to ecosystem | [Protocol Spec](./PROTOCOL.md) |
-| **Smart Contracts** | ✅ Deployed (2 chains) | Production-ready on testnet | [ETH](https://sepolia.etherscan.io/address/0xfd1411e2e3ddfC0C68649d3FEb1bE50C6d599EBd) + [AVAX](https://testnet.snowtrace.io/address/0x4c956ed76Dbe238507c06D7764440C2977Cd5275) |
+| **Smart Contracts** | ✅ Deployed (2 chains) | Production-ready on Base Sepolia | [Base](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) + [AVAX](https://testnet.snowtrace.io/address/0x4c956ed76Dbe238507c06D7764440C2977Cd5275) |
 | **Self-Sustaining Economics** | ✅ Proven | Gas refund mechanism working | [Code](./contracts/frontend/src/OmniSweeperSimple.sol#L118-L140) |
 | **Safety Mechanisms** | ✅ Tested | Rejects unprofitable swaps | [Test Results](./backend/TEST_RESULTS.md) |
 | **Backend Relayer** | ✅ Live on Railway | 7/7 tests passing | [API Health](https://omni-sweeper-production.up.railway.app/api/health) |
@@ -206,18 +206,20 @@ app.post('/api/sweep', async (req, res) => {
 **On-Chain:** Solidity, 1inch, LayerZero V2, Pyth, OpenZeppelin  
 **Backend:** Node.js, ethers.js, Express, Railway  
 **Frontend:** Next.js, wagmi, Coinbase Wallet SDK, TailwindCSS  
-**Chains:** Ethereum Sepolia, Avalanche Fuji
+**Chains:** Base Sepolia (Primary), Avalanche Fuji (Receipt Tracking)
 
 ## 🚀 Deployed Contracts
 
-### Ethereum Sepolia
-- **OmniSweeper:** [`0xfd1411e2e3ddfC0C68649d3FEb1bE50C6d599EBd`](https://sepolia.etherscan.io/address/0xfd1411e2e3ddfC0C68649d3FEb1bE50C6d599EBd)
-- **TestDustToken:** [`0xe523fc1cc80A6EF2f643895b556cf43A1f1bCF60`](https://sepolia.etherscan.io/address/0xe523fc1cc80A6EF2f643895b556cf43A1f1bCF60)
+### ⭐ Base Sepolia (PRIMARY - Memecoin Capital!)
+- **OmniSweeper:** [`0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A`](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A)
+- **Status:** ✅ Live & Cross-Chain Configured
+- **USDC:** `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
 
-### Avalanche Fuji
+### Avalanche Fuji (Destination Chain)
 - **ReceiptOApp:** [`0x4c956ed76Dbe238507c06D7764440C2977Cd5275`](https://testnet.snowtrace.io/address/0x4c956ed76Dbe238507c06D7764440C2977Cd5275)
+- **Status:** ✅ Receives cross-chain messages from Base
 
-**Cross-Chain Status:** ✅ LayerZero peers configured bidirectionally
+**Cross-Chain Status:** ✅ LayerZero peers configured bidirectionally (Base ↔ Avalanche)
 
 ---
 

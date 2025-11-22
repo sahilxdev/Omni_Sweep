@@ -9,8 +9,8 @@ contract ConfigureCrossChainBase is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         
-        // Update these after deployment
-        address omniSweeperBaseSepolia = address(0); // TO BE FILLED
+        // Contract addresses
+        address omniSweeperBaseSepolia = 0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A; // ✅ DEPLOYED!
         address receiptOAppAvalanche = 0x4c956ed76Dbe238507c06D7764440C2977Cd5275; // Your existing contract
         
         // LayerZero Endpoint IDs

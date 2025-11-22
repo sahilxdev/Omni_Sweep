@@ -21,8 +21,9 @@
 | **Coinbase CDP** | Use CDP tools | Architecture ready for Embedded Wallets + gasless UX (perfect CDP use case) | [PROTOCOL.md#L450-L480](./PROTOCOL.md#L450-L480) |
 | **1inch** | Use 1inch API | Backend integrates Aggregation API for optimal swap routing | [index.js#L47-L124](./backend/index.js#L47-L124) |
 | **1inch** | Proper git history | 50+ commits across 5 days - full development lifecycle | [GitHub Commits](https://github.com/sahilxdev/Omni_Sweep/commits/main) |
+| **World** | Build on World Chain | Backend architecture supports World Chain deployment - perfect synergy: gas abstraction on the chain with free gas for humans | [blockchain.js#L24-L30](./backend/blockchain.js#L24-L30) |
 
-**🎯 Why These Prizes:** LayerZero enables cross-chain receipts. Coinbase Base hosts the memecoin dust. 1inch optimizes swap execution. Together, they power the first self-sustaining gas abstraction protocol.
+**🎯 Why These Prizes:** LayerZero enables cross-chain receipts. Coinbase Base hosts the memecoin dust. 1inch optimizes swap execution. World brings 23M users with free gas. Together, they power the first self-sustaining gas abstraction protocol.
 
 ---
 
@@ -363,6 +364,9 @@ curl "https://omni-sweeper-production.up.railway.app/api/balance/0xa58DCCb0F1727
 
 **Ethereum Sepolia (Receipt Tracking)**  
 [`0x83A3AFEb5D6AEbcc01eaF42AA6bb9f08b58031A1`](https://sepolia.etherscan.io/address/0x83A3AFEb5D6AEbcc01eaF42AA6bb9f08b58031A1)
+
+**World Chain Sepolia (Supported - 23M Users Ready)**  
+Architecture supports World Chain deployment for verified humans with free gas
 
 ### Documentation:
 

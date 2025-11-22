@@ -7,7 +7,7 @@ dotenv.config();
 export const CONTRACTS = {
     baseSepolia: {
         omniSweeper: '0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A', // ✅ DEPLOYED!
-        testDustToken: 'TO_BE_DEPLOYED', // Optional test token
+        testDustToken: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', // Base Sepolia USDC (can be used as test token)
         usdc: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', // Official USDC on Base Sepolia
         chainId: 84532,
         rpc: 'https://sepolia.base.org',
@@ -20,6 +20,13 @@ export const CONTRACTS = {
         chainId: 11155111,
         rpc: 'https://ethereum-sepolia-rpc.publicnode.com',
         explorer: 'https://sepolia.etherscan.io'
+    },
+    worldChain: {
+        omniSweeper: 'TO_BE_DEPLOYED', // Optional: Deploy to World Chain
+        usdc: '0x79A02482A880bCE3F13e09Da970dC34db4CD24d1', // USDC on World Chain Sepolia
+        chainId: 4801,
+        rpc: 'https://worldchain-sepolia.g.alchemy.com/v2/demo',
+        explorer: 'https://worldchain-sepolia.explorer.alchemy.com'
     }
 };
 

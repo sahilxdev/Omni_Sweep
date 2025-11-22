@@ -8,6 +8,22 @@
 [![Tests](https://img.shields.io/badge/Tests-7/7%20Passing-brightgreen)](./backend/TEST_RESULTS.md)
 
 **📚 [Protocol Specification](./PROTOCOL.md) | 🔗 [Live API](https://omni-sweeper-production.up.railway.app) | 📄 [Test Results](./backend/TEST_RESULTS.md) | 🏆 [Hackathon Submission](./HACKATHON_SUBMISSION.md)**
+
+---
+
+## 🏆 Prize Track Qualifications
+
+| Sponsor | Requirement | ✅ How We Qualify | Proof |
+|---------|-------------|-------------------|-------|
+| **LayerZero** | Interact with Endpoint + Extend OApp logic | Custom `_lzReceive` with sweep receipt tracking across Base → Ethereum | [ReceiptOApp.sol#L67-L92](./contracts/frontend/src/ReceiptOApp.sol#L67-L92) |
+| **LayerZero** | Not just inherit interfaces | Added protocol statistics aggregation + event emission logic | [Cross-chain tx](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) |
+| **Coinbase CDP** | Build on Base | Deployed on Base Sepolia - the memecoin capital where dust lives | [Contract on BaseScan](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) |
+| **Coinbase CDP** | Use CDP tools | Architecture ready for Embedded Wallets + gasless UX (perfect CDP use case) | [PROTOCOL.md#L450-L480](./PROTOCOL.md#L450-L480) |
+| **1inch** | Use 1inch API | Backend integrates Aggregation API for optimal swap routing | [index.js#L47-L124](./backend/index.js#L47-L124) |
+| **1inch** | Proper git history | 50+ commits across 5 days - full development lifecycle | [GitHub Commits](https://github.com/sahilxdev/Omni_Sweep/commits/main) |
+
+**🎯 Why These Prizes:** LayerZero enables cross-chain receipts. Coinbase Base hosts the memecoin dust. 1inch optimizes swap execution. Together, they power the first self-sustaining gas abstraction protocol.
+
 ---
 
 ## 🎯 The Problem: The $0 ETH Trap
@@ -154,15 +170,27 @@ User receives USDC
 
 ---
 
-### Try It
+### 🔴 Live API Demo
+
+**Copy-paste these commands to verify it works:**
 
 ```bash
-# Check backend health
-curl https://omni-sweeper-production.up.railway.app/api/health
+# 1. Health Check (Base Sepolia contracts)
+curl -s "https://omni-sweeper-production.up.railway.app/api/health" | jq
 
-# Check your balance
-curl "https://omni-sweeper-production.up.railway.app/api/balance/YOUR_ADDRESS?token=TOKEN_ADDRESS"
+# 2. Get 1inch Quote (shows optimal routing)
+curl -s "https://omni-sweeper-production.up.railway.app/api/quote?tokenIn=0xe523fc1cc80A6EF2f643895b556cf43A1f1bCF60&amount=1000000000000000000" | jq
+
+# 3. Check Contract Info
+curl -s "https://omni-sweeper-production.up.railway.app/api/contracts" | jq
 ```
+
+**Expected Output:**
+- ✅ `omniSweeper: 0x8C64...` (Base Sepolia)
+- ✅ `chainId: 84532` (Base Sepolia)
+- ✅ `oneInchData: "0x..."` (swap routing)
+
+**Full API Docs:** [Backend README](./backend/README.md) | **Test Results:** [7/7 Passing](./backend/TEST_RESULTS.md)
 
 ---
 

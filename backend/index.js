@@ -20,14 +20,20 @@ app.use(express.json());
 const OMNISWEEPER_ADDRESS = blockchain.CONTRACTS.ethSepolia.omniSweeper;
 const USDC_ADDRESS = blockchain.CONTRACTS.ethSepolia.usdc;
 
-// Start event listeners
-blockchain.listenForSweepEvents((event) => {
-    console.log('🎉 Sweep event:', event);
-});
+// Start event listeners (disabled for production with public RPCs)
+// Enable these if using a dedicated RPC node with websockets
+if (process.env.ENABLE_EVENT_LISTENERS === 'true') {
+    blockchain.listenForSweepEvents((event) => {
+        console.log('🎉 Sweep event:', event);
+    });
 
-blockchain.listenForReceiptEvents((event) => {
-    console.log('📨 Receipt event:', event);
-});
+    blockchain.listenForReceiptEvents((event) => {
+        console.log('📨 Receipt event:', event);
+    });
+    console.log('👂 Event listeners enabled');
+} else {
+    console.log('ℹ️ Event listeners disabled (set ENABLE_EVENT_LISTENERS=true to enable)');
+}
 
 /**
  * GET /api/quote

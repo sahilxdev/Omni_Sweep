@@ -4,10 +4,9 @@
 
 [![Deployed](https://img.shields.io/badge/Status-Live-success)](https://omni-sweeper-production.up.railway.app)
 [![Protocol](https://img.shields.io/badge/Type-Gas%20Abstraction-purple)](./PROTOCOL.md)
-[![Contracts](https://img.shields.io/badge/Contracts-2%20Chains-blue)](https://sepolia.etherscan.io/address/0xfd1411e2e3ddfC0C68649d3FEb1bE50C6d599EBd)
+[![Contracts](https://img.shields.io/badge/Contracts-2%20Chains-blue)](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A)
 [![Tests](https://img.shields.io/badge/Tests-7/7%20Passing-brightgreen)](./backend/TEST_RESULTS.md)
 
-**🔗 [Live Backend API](https://omni-sweeper-production.up.railway.app) | 📄 [Test Results](./backend/TEST_RESULTS.md) | 📚 [Technical Docs](./HACKATHON_SUBMISSION.md)**
 **📚 [Protocol Specification](./PROTOCOL.md) | 🔗 [Live API](https://omni-sweeper-production.up.railway.app) | 📄 [Test Results](./backend/TEST_RESULTS.md) | 🏆 [Hackathon Submission](./HACKATHON_SUBMISSION.md)**
 ---
 
@@ -112,7 +111,7 @@ Connect Wallet → Scan Dust → Click "Sweep" → Sign Message → Done!
 | Component | Status | Impact | Proof |
 |-----------|--------|--------|-------|
 | **Gas Abstraction Protocol** | ✅ Implemented | Novel contribution to ecosystem | [Protocol Spec](./PROTOCOL.md) |
-| **Smart Contracts** | ✅ Deployed (2 chains) | Production-ready on Base Sepolia | [Base](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) + [AVAX](https://testnet.snowtrace.io/address/0x4c956ed76Dbe238507c06D7764440C2977Cd5275) |
+| **Smart Contracts** | ✅ Deployed (2 chains) | Production-ready Base + ETH Sepolia | [Base](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) + [ETH](https://sepolia.etherscan.io/address/0x83A3AFEb5D6AEbcc01eaF42AA6bb9f08b58031A1) |
 | **Self-Sustaining Economics** | ✅ Proven | Gas refund mechanism working | [Code](./contracts/frontend/src/OmniSweeperSimple.sol#L118-L140) |
 | **Safety Mechanisms** | ✅ Tested | Rejects unprofitable swaps | [Test Results](./backend/TEST_RESULTS.md) |
 | **Backend Relayer** | ✅ Live on Railway | 7/7 tests passing | [API Health](https://omni-sweeper-production.up.railway.app/api/health) |
@@ -140,7 +139,7 @@ Frontend (Next.js + wagmi)
     ↓ API calls
 Backend (Railway - Node.js + ethers.js)
     ↓ Executes transaction
-Smart Contract (Ethereum Sepolia)
+Smart Contract (Base Sepolia)
     ↓ Swaps tokens
 1inch Router
     ↓ Returns USDC
@@ -148,7 +147,7 @@ Smart Contract
     ↓ Deducts gas & bridges
 LayerZero V2
     ↓ Cross-chain message
-Receipt OApp (Avalanche Fuji)
+Receipt OApp (Ethereum Sepolia)
     ↓ Records receipt
 User receives USDC
 ```
@@ -206,7 +205,7 @@ app.post('/api/sweep', async (req, res) => {
 **On-Chain:** Solidity, 1inch, LayerZero V2, Pyth, OpenZeppelin  
 **Backend:** Node.js, ethers.js, Express, Railway  
 **Frontend:** Next.js, wagmi, Coinbase Wallet SDK, TailwindCSS  
-**Chains:** Base Sepolia (Primary), Avalanche Fuji (Receipt Tracking)
+**Chains:** Base Sepolia (Primary), Ethereum Sepolia (Receipt Tracking)
 
 ## 🚀 Deployed Contracts
 
@@ -215,11 +214,12 @@ app.post('/api/sweep', async (req, res) => {
 - **Status:** ✅ Live & Cross-Chain Configured
 - **USDC:** `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
 
-### Avalanche Fuji (Destination Chain)
-- **ReceiptOApp:** [`0x4c956ed76Dbe238507c06D7764440C2977Cd5275`](https://testnet.snowtrace.io/address/0x4c956ed76Dbe238507c06D7764440C2977Cd5275)
+### Ethereum Sepolia (Receipt Tracking Chain)
+- **ReceiptOApp:** [`0x83A3AFEb5D6AEbcc01eaF42AA6bb9f08b58031A1`](https://sepolia.etherscan.io/address/0x83A3AFEb5D6AEbcc01eaF42AA6bb9f08b58031A1)
 - **Status:** ✅ Receives cross-chain messages from Base
+- **TestDustToken:** `0xe523fc1cc80A6EF2f643895b556cf43A1f1bCF60` (for testing)
 
-**Cross-Chain Status:** ✅ LayerZero peers configured bidirectionally (Base ↔ Avalanche)
+**Cross-Chain Status:** ✅ LayerZero peers configured bidirectionally (Base Sepolia ↔ Ethereum Sepolia)
 
 ---
 
@@ -330,17 +330,16 @@ curl "https://omni-sweeper-production.up.railway.app/api/balance/0xa58DCCb0F1727
 
 ### Deployed Contracts:
 
-**Ethereum Sepolia (Source Chain)**  
-[`0xfd1411e2e3ddfC0C68649d3FEb1bE50C6d599EBd`](https://sepolia.etherscan.io/address/0xfd1411e2e3ddfC0C68649d3FEb1bE50C6d599EBd)
+**Base Sepolia (Primary - Sweep Source)**  
+[`0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A`](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A)
 
-**Avalanche Fuji (Destination Chain)**  
-[`0x4c956ed76Dbe238507c06D7764440C2977Cd5275`](https://testnet.snowtrace.io/address/0x4c956ed76Dbe238507c06D7764440C2977Cd5275)
+**Ethereum Sepolia (Receipt Tracking)**  
+[`0x83A3AFEb5D6AEbcc01eaF42AA6bb9f08b58031A1`](https://sepolia.etherscan.io/address/0x83A3AFEb5D6AEbcc01eaF42AA6bb9f08b58031A1)
 
 ### Documentation:
 
 📚 **[Full Protocol Specification](./PROTOCOL.md)** - Technical deep dive  
 📄 **[Test Results](./backend/TEST_RESULTS.md)** - All 7/7 tests passing  
-🏆 **[Hackathon Submission](./HACKATHON_SUBMISSION.md)** - Complete submission  
 🔧 **[API Documentation](./backend/FUNCTIONAL_BACKEND.md)** - Backend integration  
 
 ### The Pitch:

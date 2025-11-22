@@ -44,7 +44,7 @@ Thumbs.db
 # Foundry
 cache/
 out/
-broadcast/
+
 lib/
 
 # Hardhat

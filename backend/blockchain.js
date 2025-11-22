@@ -5,18 +5,36 @@ dotenv.config();
 
 // Contract addresses
 export const CONTRACTS = {
+    baseSepolia: {
+        omniSweeper: 'TO_BE_DEPLOYED', // Deploy first
+        testDustToken: 'TO_BE_DEPLOYED', // Optional test token
+        usdc: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', // Official USDC on Base Sepolia
+        chainId: 84532,
+        rpc: 'https://sepolia.base.org',
+        explorer: 'https://sepolia.basescan.org'
+    },
+    avalancheFuji: {
+        receiptOApp: '0x4c956ed76Dbe238507c06D7764440C2977Cd5275',
+        chainId: 43113,
+        rpc: 'https://api.avax-test.network/ext/bc/C/rpc',
+        explorer: 'https://testnet.snowtrace.io'
+    },
+    // Keep old deployment for reference
     ethSepolia: {
         omniSweeper: '0xfd1411e2e3ddfC0C68649d3FEb1bE50C6d599EBd',
         testDustToken: '0xe523fc1cc80A6EF2f643895b556cf43A1f1bCF60',
         usdc: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
         chainId: 11155111,
-        rpc: 'https://ethereum-sepolia-rpc.publicnode.com'
-    },
-    avalancheFuji: {
-        receiptOApp: '0x4c956ed76Dbe238507c06D7764440C2977Cd5275',
-        chainId: 43113,
-        rpc: 'https://api.avax-test.network/ext/bc/C/rpc'
+        rpc: 'https://ethereum-sepolia-rpc.publicnode.com',
+        explorer: 'https://sepolia.etherscan.io'
     }
+};
+
+// Initialize providers
+export const providers = {
+    baseSepolia: new ethers.JsonRpcProvider(CONTRACTS.baseSepolia.rpc),
+    avalancheFuji: new ethers.JsonRpcProvider(CONTRACTS.avalancheFuji.rpc),
+    ethSepolia: new ethers.JsonRpcProvider(CONTRACTS.ethSepolia.rpc) // Keep for reference
 };
 
 // ABIs

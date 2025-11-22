@@ -16,9 +16,9 @@ const wallet = blockchain.initializeBackendWallet();
 app.use(cors());
 app.use(express.json());
 
-// Contract addresses
-const OMNISWEEPER_ADDRESS = blockchain.CONTRACTS.ethSepolia.omniSweeper;
-const USDC_ADDRESS = blockchain.CONTRACTS.ethSepolia.usdc;
+// Contract addresses - NOW USING BASE SEPOLIA!
+const OMNISWEEPER_ADDRESS = blockchain.CONTRACTS.baseSepolia.omniSweeper;
+const USDC_ADDRESS = blockchain.CONTRACTS.baseSepolia.usdc;
 
 // Start event listeners (disabled for production with public RPCs)
 // Enable these if using a dedicated RPC node with websockets

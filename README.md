@@ -156,8 +156,9 @@ OmniSweep is a **gas-abstracted dust sweeper** that:
 
 ## 📖 Documentation
 
+- **[Technical Specification](./TECHNICAL_SPEC.md)** - Complete implementation guide (START HERE)
 - [Vision & Strategy](./vision.md) - Project philosophy and competitive analysis
-- [Architecture](./ARCHITECTURE.md) - Technical deep dive
+- [Architecture](./ARCHITECTURE.md) - High-level technical design
 - [Contributing](./CONTRIBUTING.md) - Development guidelines
 
 ## 🤝 Contributing

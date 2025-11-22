@@ -1,0 +1,12 @@
+[submodule "contracts/frontend/lib/forge-std"]
+	path = contracts/frontend/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "contracts/frontend/lib/openzeppelin-contracts"]
+	path = contracts/frontend/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "contracts/frontend/lib/LayerZero-v2"]
+	path = contracts/frontend/lib/LayerZero-v2
+	url = https://github.com/LayerZero-Labs/LayerZero-v2
+[submodule "contracts/frontend/lib/pyth-sdk-solidity"]
+	path = contracts/frontend/lib/pyth-sdk-solidity
+	url = https://github.com/pyth-network/pyth-sdk-solidity

@@ -1,0 +1,73 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "forge-std/Script.sol";
+import "../src/OmniSweeper.sol";
+import "../src/ReceiptOApp.sol";
+
+contract DeployOmniSweeper is Script {
+    function run() external {
+        uint256 deployerKey = vm.envUint("PRIVATE_KEY");
+        address deployer = vm.addr(deployerKey);
+        
+        console.log("Deploying with:", deployer);
+        
+        vm.startBroadcast(deployerKey);
+        
+        // Optimism Sepolia Addresses
+        address lzEndpoint = 0x6EDCE65403992e310A62460808c4b910D972f10f;
+        address pyth = 0x0708325268dF9F66270F1401206434524814508b;
+        address oneInch = 0x1111111254EEB25477B68fb85Ed929f73A960582;
+        address stargate = 0xE3B53AF74a4BF62Ae5511055290838050bf764Df;
+        address usdc = 0x5fd84259d66Cd46123540766Be93DFE6D43130D7;
+        address paymaster = deployer; // For MVP, deployer is paymaster
+        
+        uint32 baseEid = 40245; // Base Sepolia endpoint ID
+        
+        // Pyth price IDs (examples - replace with actual)
+        bytes32 ethPriceId = 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace;
+        bytes32 usdcPriceId = 0xeaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a;
+        bytes32 tokenPriceId = ethPriceId; // For MVP, use ETH price
+        
+        OmniSweeper sweeper = new OmniSweeper(
+            lzEndpoint,
+            deployer,
+            pyth,
+            oneInch,
+            stargate,
+            usdc,
+            paymaster,
+            baseEid,
+            tokenPriceId,
+            usdcPriceId,
+            ethPriceId
+        );
+        
+        console.log("OmniSweeper deployed:", address(sweeper));
+        
+        vm.stopBroadcast();
+    }
+}
+
+contract DeployReceiptOApp is Script {
+    function run() external {
+        uint256 deployerKey = vm.envUint("PRIVATE_KEY");
+        address deployer = vm.addr(deployerKey);
+        
+        console.log("Deploying with:", deployer);
+        
+        vm.startBroadcast(deployerKey);
+        
+        // Base Sepolia Addresses
+        address lzEndpoint = 0x6EDCE65403992e310A62460808c4b910D972f10f;
+        
+        ReceiptOApp receipt = new ReceiptOApp(
+            lzEndpoint,
+            deployer
+        );
+        
+        console.log("ReceiptOApp deployed:", address(receipt));
+        
+        vm.stopBroadcast();
+    }
+}

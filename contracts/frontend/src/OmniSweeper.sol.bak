@@ -1,0 +1,283 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {OApp, Origin, MessagingFee} from "@layerzerolabs/lz-evm-oapp-v2/contracts/oapp/OApp.sol";
+import "@pyth-sdk-solidity/IPyth.sol";
+import "@pyth-sdk-solidity/PythStructs.sol";
+
+/**
+ * @title OmniSweeper
+ * @notice Gasless dust sweeper with Gas Advance Protocol
+ * @dev Integrates: LayerZero, 1inch, Pyth, Stargate for cross-chain dust aggregation
+ */
+contract OmniSweeper is OApp {
+    using SafeERC20 for IERC20;
+
+    // ============ State Variables ============
+    
+    IPyth public immutable pyth;
+    address public immutable oneInchRouter;
+    address public immutable stargateRouter;
+    address public immutable usdc;
+    address public immutable paymaster;
+    uint32 public immutable dstEid; // Base chain endpoint ID
+    
+    bytes32 public immutable tokenPriceId; // Pyth price ID for input token
+    bytes32 public immutable usdcPriceId;  // Pyth price ID for USDC
+    bytes32 public immutable ethPriceId;   // Pyth price ID for ETH (for gas calculation)
+    
+    uint256 public constant PROTOCOL_FEE_BPS = 50; // 0.5%
+    uint256 public constant MIN_PROFIT_MARGIN = 12000; // 120% (dust must be worth 1.2x gas cost)
+    
+    // ============ Events ============
+    
+    event DustSwept(
+        address indexed user,
+        address indexed tokenIn,
+        uint256 amountIn,
+        uint256 usdcOut,
+        uint256 gasCost,
+        uint256 netOutput,
+        bool worldIdVerified,
+        uint256 timestamp
+    );
+    
+    event UnprofitableSweep(
+        address indexed user,
+        uint256 dustValue,
+        uint256 estimatedGas
+    );
+    
+    // ============ Constructor ============
+    
+    constructor(
+        address _endpoint,
+        address _owner,
+        address _pyth,
+        address _oneInchRouter,
+        address _stargateRouter,
+        address _usdc,
+        address _paymaster,
+        uint32 _dstEid,
+        bytes32 _tokenPriceId,
+        bytes32 _usdcPriceId,
+        bytes32 _ethPriceId
+    ) OApp(_endpoint, _owner) {
+        pyth = IPyth(_pyth);
+        oneInchRouter = _oneInchRouter;
+        stargateRouter = _stargateRouter;
+        usdc = _usdc;
+        paymaster = _paymaster;
+        dstEid = _dstEid;
+        tokenPriceId = _tokenPriceId;
+        usdcPriceId = _usdcPriceId;
+        ethPriceId = _ethPriceId;
+    }
+    
+    // ============ Main Function ============
+    
+    /**
+     * @notice Sweep dust with Gas Advance Protocol
+     * @param tokenIn Address of dust token to sweep
+     * @param amount Amount of dust token
+     * @param oneInchData Calldata for 1inch swap
+     * @param pythUpdateData Pyth price update data
+     * @param worldIdProof World ID verification proof (empty if unverified)
+     * @return netOutput Amount of USDC sent to user on Base
+     */
+    function sweepDustWithGasRefund(
+        address tokenIn,
+        uint256 amount,
+        bytes calldata oneInchData,
+        bytes[] calldata pythUpdateData,
+        bytes calldata worldIdProof
+    ) external payable returns (uint256 netOutput) {
+        uint256 gasBefore = gasleft();
+        
+        // ============ Step 1: Update Pyth Prices (CRITICAL FOR PYTH PRIZE) ============
+        uint256 updateFee = pyth.getUpdateFee(pythUpdateData);
+        pyth.updatePriceFeeds{value: updateFee}(pythUpdateData);
+        
+        // ============ Step 2: Validate Profitability (PYTH SAFETY CHECK) ============
+        _validateProfitability(tokenIn, amount);
+        
+        // ============ Step 3: Pull Dust from User ============
+        IERC20(tokenIn).safeTransferFrom(msg.sender, address(this), amount);
+        
+        // ============ Step 4: Swap via 1inch (1INCH INTEGRATION) ============
+        IERC20(tokenIn).safeIncreaseAllowance(oneInchRouter, amount);
+        
+        (bool success,) = oneInchRouter.call(oneInchData);
+        require(success, "1inch swap failed");
+        
+        uint256 usdcReceived = IERC20(usdc).balanceOf(address(this));
+        require(usdcReceived > 0, "No USDC received");
+        
+        // ============ Step 5: Calculate Gas Cost (GAS ADVANCE PROTOCOL) ============
+        uint256 gasUsed = gasBefore - gasleft() + 150000; // Add buffer for remaining ops
+        uint256 gasCostUSDC = _calculateGasCostInUSDC(gasUsed);
+        
+        // ============ Step 6: Apply Gas Advance Logic ============
+        bool isWorldVerified = _verifyWorldId(worldIdProof, msg.sender);
+        
+        if (isWorldVerified) {
+            // World ID verified: NO gas deduction (WORLD PRIZE)
+            netOutput = usdcReceived;
+        } else {
+            // Unverified: deduct gas + protocol fee
+            uint256 protocolFee = (usdcReceived * PROTOCOL_FEE_BPS) / 10000;
+            uint256 totalDeduction = gasCostUSDC + protocolFee;
+            
+            require(usdcReceived > totalDeduction, "Insufficient output");
+            
+            netOutput = usdcReceived - totalDeduction;
+            
+            // Refund paymaster in USDC
+            IERC20(usdc).safeTransfer(paymaster, gasCostUSDC);
+            IERC20(usdc).safeTransfer(owner(), protocolFee);
+        }
+        
+        // ============ Step 7: Bridge to Base via Stargate (LAYERZERO INTEGRATION) ============
+        IERC20(usdc).safeIncreaseAllowance(stargateRouter, netOutput);
+        
+        // Stargate swap parameters
+        uint16 dstChainId = 184; // Base Stargate chain ID
+        uint256 srcPoolId = 1; // USDC pool
+        uint256 dstPoolId = 1; // USDC pool
+        
+        bytes memory lzTxParams = abi.encode(
+            200000, // dstGasForCall
+            0,      // dstNativeAmount
+            abi.encodePacked(msg.sender) // dstNativeAddr
+        );
+        
+        IStargateRouter(stargateRouter).swap{value: msg.value - updateFee}(
+            dstChainId,
+            srcPoolId,
+            dstPoolId,
+            payable(msg.sender),
+            netOutput,
+            (netOutput * 9950) / 10000, // 0.5% slippage
+            IStargateRouter.lzTxObj(200000, 0, "0x"),
+            abi.encodePacked(msg.sender),
+            bytes("")
+        );
+        
+        // ============ Step 8: Send Receipt via LayerZero (LAYERZERO PRIZE) ============
+        bytes memory message = abi.encode(msg.sender, netOutput);
+        bytes memory options = hex"00030100110100000000000000000000000000030d40"; // default options
+        
+        _lzSend(
+            dstEid,
+            message,
+            options,
+            MessagingFee((msg.value - updateFee) / 2, 0),
+            payable(msg.sender)
+        );
+        
+        emit DustSwept(
+            msg.sender,
+            tokenIn,
+            amount,
+            usdcReceived,
+            gasCostUSDC,
+            netOutput,
+            isWorldVerified,
+            block.timestamp
+        );
+    }
+    
+    // ============ Internal Functions ============
+    
+    /**
+     * @notice Validate that dust value > gas cost (Pyth integration)
+     */
+    function _validateProfitability(address tokenIn, uint256 amount) internal view {
+        // Get token price from Pyth
+        PythStructs.Price memory tokenPrice = pyth.getPrice(tokenPriceId);
+        require(tokenPrice.price > 0, "Invalid token price");
+        
+        // Calculate dust value in USD (assuming 18 decimals)
+        uint256 dustValueUSD = (amount * uint256(uint64(tokenPrice.price))) / 1e18;
+        
+        // Estimate gas cost
+        uint256 estimatedGas = tx.gasprice * 500000; // Estimate 500k gas
+        
+        // Get ETH price from Pyth
+        PythStructs.Price memory ethPrice = pyth.getPrice(ethPriceId);
+        require(ethPrice.price > 0, "Invalid ETH price");
+        
+        // Convert gas cost to USD
+        uint256 gasCostUSD = (estimatedGas * uint256(uint64(ethPrice.price))) / 1e18;
+        
+        // Require dust value > 1.2x gas cost (safety margin)
+        require(
+            dustValueUSD * 10000 > gasCostUSD * MIN_PROFIT_MARGIN,
+            "Dust value too low"
+        );
+    }
+    
+    /**
+     * @notice Calculate gas cost in USDC
+     */
+    function _calculateGasCostInUSDC(uint256 gasUsed) internal view returns (uint256) {
+        uint256 gasCostWei = gasUsed * tx.gasprice;
+        
+        // Get ETH and USDC prices
+        PythStructs.Price memory ethPrice = pyth.getPrice(ethPriceId);
+        PythStructs.Price memory usdcPrice = pyth.getPrice(usdcPriceId);
+        
+        // Convert to USDC (6 decimals)
+        uint256 gasCostUSD = (gasCostWei * uint256(uint64(ethPrice.price))) / 1e18;
+        uint256 gasCostUSDC = (gasCostUSD * 1e6) / uint256(uint64(usdcPrice.price));
+        
+        return gasCostUSDC;
+    }
+    
+    /**
+     * @notice Verify World ID proof (simplified for MVP)
+     * @dev In production, implement full World ID verification
+     */
+    function _verifyWorldId(bytes calldata proof, address user) internal pure returns (bool) {
+        // TODO: Implement World ID verification via IWorldID.verifyProof()
+        // For MVP, check if proof is non-empty
+        return proof.length > 0;
+    }
+    
+    /**
+     * @notice LayerZero receive function (not used on source chain)
+     */
+    function _lzReceive(
+        Origin calldata,
+        bytes32,
+        bytes calldata,
+        address,
+        bytes calldata
+    ) internal override {
+        revert("Not implemented on source chain");
+    }
+}
+
+// ============ External Interfaces ============
+
+interface IStargateRouter {
+    struct lzTxObj {
+        uint256 dstGasForCall;
+        uint256 dstNativeAmount;
+        bytes dstNativeAddr;
+    }
+    
+    function swap(
+        uint16 _dstChainId,
+        uint256 _srcPoolId,
+        uint256 _dstPoolId,
+        address payable _refundAddress,
+        uint256 _amountLD,
+        uint256 _minAmountLD,
+        lzTxObj memory _lzTxParams,
+        bytes calldata _to,
+        bytes calldata _payload
+    ) external payable;
+}

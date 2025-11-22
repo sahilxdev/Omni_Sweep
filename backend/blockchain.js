@@ -87,7 +87,7 @@ export function getContracts() {
 }
 
 // Get token contract
-export function getTokenContract(tokenAddress, provider = providers.ethSepolia) {
+export function getTokenContract(tokenAddress, provider = providers.baseSepolia) {  // ✅ BASE SEPOLIA!
     return new ethers.Contract(tokenAddress, ABIS.ERC20, provider);
 }
 
@@ -98,7 +98,7 @@ export async function executeSweep(userAddress, tokenIn, amount, oneInchData, mi
     }
     
     const omniSweeper = new ethers.Contract(
-        CONTRACTS.ethSepolia.omniSweeper,
+        CONTRACTS.baseSepolia.omniSweeper,  // ✅ BASE SEPOLIA!
         ABIS.OmniSweeper,
         backendWallet
     );

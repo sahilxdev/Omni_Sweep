@@ -46,7 +46,7 @@ if (process.env.ENABLE_EVENT_LISTENERS === 'true') {
  */
 app.get('/api/quote', async (req, res) => {
     try {
-        const { tokenIn, amount, chainId = '11155111' } = req.query;
+        const { tokenIn, amount, chainId = '84532' } = req.query; // ✅ BASE SEPOLIA DEFAULT!
         
         if (!tokenIn || !amount) {
             return res.status(400).json({
@@ -201,7 +201,7 @@ app.post('/api/sweep', async (req, res) => {
         res.json({
             success: true,
             transaction: txData,
-            explorer: `https://sepolia.etherscan.io/tx/${txData.hash}`
+            explorer: `https://sepolia.basescan.org/tx/${txData.hash}`  // ✅ BASE SEPOLIA!
         });
         
     } catch (error) {
@@ -220,7 +220,7 @@ app.post('/api/sweep', async (req, res) => {
 app.get('/api/transaction/:hash', async (req, res) => {
     try {
         const { hash } = req.params;
-        const { chain = 'ethSepolia' } = req.query;
+        const { chain = 'baseSepolia' } = req.query;  // ✅ BASE SEPOLIA DEFAULT!
         
         const provider = blockchain.providers[chain];
         if (!provider) {
@@ -235,7 +235,9 @@ app.get('/api/transaction/:hash', async (req, res) => {
         res.json({
             success: true,
             receipt,
-            explorer: chain === 'ethSepolia' 
+            explorer: chain === 'baseSepolia'   // ✅ BASE SEPOLIA!
+                ? `https://sepolia.basescan.org/tx/${hash}`
+                : chain === 'ethSepolia'
                 ? `https://sepolia.etherscan.io/tx/${hash}`
                 : `https://testnet.snowtrace.io/tx/${hash}`
         });

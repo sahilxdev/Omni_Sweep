@@ -9,12 +9,11 @@ contract DeployWorldChain is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        // World Chain Sepolia addresses
-        // Note: World Chain Sepolia uses Eid 40247
-        address lzEndpoint = 0x6C7Ab2202C98C4227C5c46f1417D81144DA716Ff; // LayerZero V2 Endpoint on World Sepolia
+        // World Chain Sepolia addresses (Chain ID: 4801)
+        address lzEndpoint = 0x6C7Ab2202C98C4227C5c46f1417D81144DA716Ff; // LayerZero V2 Endpoint
         address owner = vm.addr(deployerPrivateKey);
         address oneInchRouter = 0x1111111254EEB25477B68fb85Ed929f73A960582; // 1inch v5 router
-        address stargateRouter = 0x45A01E4e04F14f7A4a6702c74187c5F6222033cd; // Stargate router (may not exist)
+        address stargateRouter = 0x45A01E4e04F14f7A4a6702c74187c5F6222033cd; // Stargate router
         address usdc = 0x79A02482A880bCE3F13e09Da970dC34db4CD24d1; // USDC on World Chain Sepolia
         address paymaster = owner;
         uint32 dstEid = 40161; // Ethereum Sepolia endpoint ID

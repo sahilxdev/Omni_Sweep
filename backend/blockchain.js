@@ -22,10 +22,10 @@ export const CONTRACTS = {
         explorer: 'https://sepolia.etherscan.io'
     },
     worldChain: {
-        omniSweeper: 'TO_BE_DEPLOYED', // Optional: Deploy to World Chain
+        omniSweeper: 'TO_BE_DEPLOYED', // Deploying now
         usdc: '0x79A02482A880bCE3F13e09Da970dC34db4CD24d1', // USDC on World Chain Sepolia
         chainId: 4801,
-        rpc: 'https://worldchain-sepolia.g.alchemy.com/v2/demo',
+        rpc: 'https://worldchain-sepolia.g.alchemy.com/public',
         explorer: 'https://worldchain-sepolia.explorer.alchemy.com'
     }
 };

@@ -28,13 +28,13 @@
 **Not about gas being expensive. It's about having ZERO gas to move anything.**
 
 ### The Scenario:
-- You have $15 of PEPE on Optimism
+- You have $15 of PEPE on Base (the memecoin capital!)
 - You have **$0.00 ETH** in that wallet
 - You **cannot** move the $15 because you **cannot** pay the $0.01 gas
 
 ### Traditional Solution (Broken):
 1. Buy ETH on exchange → 5 min
-2. Bridge ETH to Optimism → 10 min  
+2. Bridge ETH to Base → 10 min  
 3. Swap on Uniswap → 2 min
 4. **Total: 17 minutes for $15** → Most users abandon it
 

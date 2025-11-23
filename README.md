@@ -13,17 +13,13 @@
 
 ## 🏆 Prize Track Qualifications
 
-| Sponsor | Requirement | ✅ How We Qualify | Proof |
-|---------|-------------|-------------------|-------|
-| **LayerZero** | Interact with Endpoint + Extend OApp logic | Custom `_lzReceive` with sweep receipt tracking across Base → Ethereum | [ReceiptOApp.sol#L67-L92](./contracts/frontend/src/ReceiptOApp.sol#L67-L92) |
-| **LayerZero** | Not just inherit interfaces | Added protocol statistics aggregation + event emission logic | [Cross-chain tx](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) |
-| **Coinbase CDP** | Build on Base | Deployed on Base Sepolia - the memecoin capital where dust lives | [Contract on BaseScan](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) |
-| **Coinbase CDP** | Use CDP tools | Architecture ready for Embedded Wallets + gasless UX (perfect CDP use case) | [docs/PROTOCOL.md#L450-L480](./docs/PROTOCOL.md#L450-L480) |
-| **1inch** | Use 1inch API | Backend integrates Aggregation API for optimal swap routing | [index.js#L47-L124](./backend/index.js#L47-L124) |
-| **1inch** | Proper git history | 50+ commits across 5 days - full development lifecycle | [GitHub Commits](https://github.com/sahilxdev/Omni_Sweep/commits/main) |
-| **World** | Build on World Chain | Backend architecture supports World Chain deployment - perfect synergy: gas abstraction on the chain with free gas for humans | [blockchain.js#L24-L30](./backend/blockchain.js#L24-L30) |
+| Sponsor | Prize | ✅ How We Qualify | Proof |
+|---------|-------|-------------------|-------|
+| **World Mini App** | $17k pool | Full MiniKit SDK integration with World ID verification, payments, wallet integration | [Frontend Repo](https://github.com/agrixm/omnisweep) |
+| **Coinbase CDP** | $20k pool | Built on Base Sepolia + Smart Wallet architecture ready | [Contract on BaseScan](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) |
+| **World Pool** | $3k pool | World Chain support + Backend configured for 23M users | [blockchain.js#L24-L30](./backend/blockchain.js#L24-L30) |
 
-**🎯 Why These Prizes:** LayerZero enables cross-chain receipts. Coinbase Base hosts the memecoin dust. 1inch optimizes swap execution. World brings 23M users with free gas. Together, they power the first self-sustaining gas abstraction protocol.
+**🎯 Our Focus:** World Mini App (23M users, MiniKit SDK) + Coinbase CDP (Base deployment, Smart Wallets) + World ecosystem (gas-free for verified humans). Together, bringing gasless asset movement to millions.
 
 ---
 
@@ -287,8 +283,8 @@ Innovation: Self-funding, scales infinitely
 ✅ Cross-chain receipt tracking (LayerZero extended)  
 ✅ Production-grade implementation
 
-**Prize Targets:** LayerZero, 1inch, Pyth, Coinbase CDP, Worldcoin  
-**Expected Value:** $40k-$80k (protocol innovation premium)
+**Prize Targets:** World Mini App, Coinbase CDP, World Pool  
+**Expected Value:** $10k-$25k (realistic with focused execution)
 
 ---
 
@@ -296,11 +292,9 @@ Innovation: Self-funding, scales infinitely
 
 | Sponsor | What We Use | Why It Matters |
 |---------|-------------|----------------|
-| **LayerZero** | OApp V2, cross-chain messaging | Extended `_lzReceive`, 2 chains configured |
-| **1inch** | Swap API, aggregation router | Backend integrated, optimal routes |
-| **Pyth** | Price feeds (architecture ready) | Safety checks prevent bad trades |
-| **Coinbase CDP** | Smart Wallet (ready for frontend) | Gasless UX, batch transactions |
-| **Worldcoin** | World ID (logic in contracts) | Gas waivers for verified users |
+| **World** | MiniKit SDK, World ID, World Chain | 23M users, gas-free txs, verified humans |
+| **Coinbase CDP** | Base Sepolia, Smart Wallet architecture | Memecoin capital, gasless UX ready |
+| **LayerZero** | Cross-chain messaging (Base ↔ ETH) | Receipt tracking across chains |
 
 ---
 

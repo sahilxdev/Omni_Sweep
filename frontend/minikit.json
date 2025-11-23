@@ -1,0 +1,26 @@
+{
+  "name": "OmniSweep",
+  "short_name": "OmniSweep",
+  "description": "Sweep dust tokens to USDC on Base - gasless and efficient",
+  "categories": ["defi", "utility"],
+  "icon": {
+    "url": "/icon.png"
+  },
+  "homepage_url": "https://your-domain.com",
+  "screenshots": [
+    {
+      "url": "/screenshot1.png"
+    }
+  ],
+  "verification_type": "orb",
+  "permissions": [
+    "wallet:read",
+    "wallet:write",
+    "identity:read"
+  ],
+  "supported_chains": [
+    "worldchain",
+    "base",
+    "optimism"
+  ]
+}

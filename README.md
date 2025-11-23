@@ -3,11 +3,11 @@
 > **Turn your dust into cash. Zero upfront cost. Dust pays for its own gas.**
 
 [![Deployed](https://img.shields.io/badge/Status-Live-success)](https://omni-sweeper-production.up.railway.app)
-[![Protocol](https://img.shields.io/badge/Type-Gas%20Abstraction-purple)](./PROTOCOL.md)
+[![Protocol](https://img.shields.io/badge/Type-Gas%20Abstraction-purple)](./docs/PROTOCOL.md)
 [![Contracts](https://img.shields.io/badge/Contracts-2%20Chains-blue)](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A)
-[![Tests](https://img.shields.io/badge/Tests-7/7%20Passing-brightgreen)](./backend/TEST_RESULTS.md)
+[![Tests](https://img.shields.io/badge/Tests-7/7%20Passing-brightgreen)](./docs/backend/TEST_RESULTS.md)
 
-**📚 [Protocol Specification](./PROTOCOL.md) | 🔗 [Live API](https://omni-sweeper-production.up.railway.app) | 📄 [Test Results](./backend/TEST_RESULTS.md) | 🏆 [Hackathon Submission](./HACKATHON_SUBMISSION.md)**
+**📚 [Protocol Specification](./docs/PROTOCOL.md) | 🔗 [Live API](https://omni-sweeper-production.up.railway.app) | 📄 [Test Results](./docs/backend/TEST_RESULTS.md) | 🏆 [Hackathon Submission](./docs/HACKATHON_SUBMISSION.md)**
 
 ---
 
@@ -18,7 +18,7 @@
 | **LayerZero** | Interact with Endpoint + Extend OApp logic | Custom `_lzReceive` with sweep receipt tracking across Base → Ethereum | [ReceiptOApp.sol#L67-L92](./contracts/frontend/src/ReceiptOApp.sol#L67-L92) |
 | **LayerZero** | Not just inherit interfaces | Added protocol statistics aggregation + event emission logic | [Cross-chain tx](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) |
 | **Coinbase CDP** | Build on Base | Deployed on Base Sepolia - the memecoin capital where dust lives | [Contract on BaseScan](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) |
-| **Coinbase CDP** | Use CDP tools | Architecture ready for Embedded Wallets + gasless UX (perfect CDP use case) | [PROTOCOL.md#L450-L480](./PROTOCOL.md#L450-L480) |
+| **Coinbase CDP** | Use CDP tools | Architecture ready for Embedded Wallets + gasless UX (perfect CDP use case) | [docs/PROTOCOL.md#L450-L480](./docs/PROTOCOL.md#L450-L480) |
 | **1inch** | Use 1inch API | Backend integrates Aggregation API for optimal swap routing | [index.js#L47-L124](./backend/index.js#L47-L124) |
 | **1inch** | Proper git history | 50+ commits across 5 days - full development lifecycle | [GitHub Commits](https://github.com/sahilxdev/Omni_Sweep/commits/main) |
 | **World** | Build on World Chain | Backend architecture supports World Chain deployment - perfect synergy: gas abstraction on the chain with free gas for humans | [blockchain.js#L24-L30](./backend/blockchain.js#L24-L30) |
@@ -119,7 +119,7 @@ Connect Wallet → Scan Dust → Click "Sweep" → Sign Message → Done!
 8. **Bridge** LayerZero sends USDC cross-chain
 9. **Earn** User receives profit in wallet
 
-[→ See detailed flow](./backend/TEST_RESULTS.md#user-flow)
+[→ See detailed flow](./docs/backend/TEST_RESULTS.md#user-flow)
 
 ---
 
@@ -127,12 +127,12 @@ Connect Wallet → Scan Dust → Click "Sweep" → Sign Message → Done!
 
 | Component | Status | Impact | Proof |
 |-----------|--------|--------|-------|
-| **Gas Abstraction Protocol** | ✅ Implemented | Novel contribution to ecosystem | [Protocol Spec](./PROTOCOL.md) |
+| **Gas Abstraction Protocol** | ✅ Implemented | Novel contribution to ecosystem | [Protocol Spec](./docs/PROTOCOL.md) |
 | **Smart Contracts** | ✅ Deployed (2 chains) | Production-ready Base + ETH Sepolia | [Base](https://sepolia.basescan.org/address/0x8C64716b0d512Fef62F5f42FC01e83D70350EB8A) + [ETH](https://sepolia.etherscan.io/address/0x83A3AFEb5D6AEbcc01eaF42AA6bb9f08b58031A1) |
 | **Self-Sustaining Economics** | ✅ Proven | Gas refund mechanism working | [Code](./contracts/frontend/src/OmniSweeperSimple.sol#L118-L140) |
-| **Safety Mechanisms** | ✅ Tested | Rejects unprofitable swaps | [Test Results](./backend/TEST_RESULTS.md) |
+| **Safety Mechanisms** | ✅ Tested | Rejects unprofitable swaps | [Test Results](./docs/backend/TEST_RESULTS.md) |
 | **Backend Relayer** | ✅ Live on Railway | 7/7 tests passing | [API Health](https://omni-sweeper-production.up.railway.app/api/health) |
-| **Cross-Chain Messaging** | ✅ Configured | LayerZero V2 peers active | [Config Proof](./DEPLOYMENTS.md) |
+| **Cross-Chain Messaging** | ✅ Configured | LayerZero V2 peers active | [Config Proof](./docs/DEPLOYMENTS.md) |
 | **Transaction Execution** | ✅ Verified | Backend wallet funded (5 ETH) | Sweep attempted successfully |
 | **1inch Integration** | ✅ Complete | Optimal swap routes | [Backend API](./backend/index.js#L47) |
 
@@ -191,7 +191,7 @@ curl -s "https://omni-sweeper-production.up.railway.app/api/contracts" | jq
 - ✅ `chainId: 84532` (Base Sepolia)
 - ✅ `oneInchData: "0x..."` (swap routing)
 
-**Full API Docs:** [Backend README](./backend/README.md) | **Test Results:** [7/7 Passing](./backend/TEST_RESULTS.md)
+**Full API Docs:** [Backend README](./backend/README.md) | **Test Results:** [7/7 Passing](./docs/backend/TEST_RESULTS.md)
 
 ---
 
@@ -306,11 +306,13 @@ Innovation: Self-funding, scales infinitely
 
 ## 📚 Documentation
 
-- **📄 [Test Results](./backend/TEST_RESULTS.md)** - Complete backend testing (7/7 passing)
-- **📚 [Hackathon Submission](./HACKATHON_SUBMISSION.md)** - Full technical documentation
+- **📄 [Test Results](./docs/backend/TEST_RESULTS.md)** - Complete backend testing (7/7 passing)
+- **📚 [Hackathon Submission](./docs/HACKATHON_SUBMISSION.md)** - Full technical documentation
 - **🔧 [Backend README](./backend/README.md)** - API documentation
-- **🚀 [Quick Start](./QUICK_START.md)** - Get started in 5 minutes
-- **📍 [Deployments](./DEPLOYMENTS.md)** - Contract addresses & verification
+- **🚀 [Quick Start](./docs/QUICK_START.md)** - Get started in 5 minutes
+- **📍 [Deployments](./docs/DEPLOYMENTS.md)** - Contract addresses & verification
+- **🏗️ [Architecture](./docs/ARCHITECTURE.md)** - System design & flow
+- **⚙️ [Technical Spec](./docs/TECHNICAL_SPEC.md)** - Implementation details
 
 ---
 
@@ -370,9 +372,9 @@ Architecture supports World Chain deployment for verified humans with free gas
 
 ### Documentation:
 
-📚 **[Full Protocol Specification](./PROTOCOL.md)** - Technical deep dive  
-📄 **[Test Results](./backend/TEST_RESULTS.md)** - All 7/7 tests passing  
-🔧 **[API Documentation](./backend/FUNCTIONAL_BACKEND.md)** - Backend integration  
+📚 **[Full Protocol Specification](./docs/PROTOCOL.md)** - Technical deep dive  
+📄 **[Test Results](./docs/backend/TEST_RESULTS.md)** - All 7/7 tests passing  
+🔧 **[API Documentation](./docs/backend/FUNCTIONAL_BACKEND.md)** - Backend integration  
 
 ### The Pitch:
 
